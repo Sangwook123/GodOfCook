@@ -84,7 +84,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_add_30"
-            android:backgroundTint="?colorSurface"
+            android:backgroundTint="?colorSecondary"
+            app:tint="?colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="@id/rv_main_post"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="30dp" />
