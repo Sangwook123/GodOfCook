@@ -16,11 +16,27 @@ import org.mtc.godofcook.util.view.UiState
 
 @AndroidEntryPoint
 class AddActivity : BindingActivity<ActivityAddBinding>(R.layout.activity_add) {
-    private val viewModel : AddViewModel by viewModels()
+    private val viewModel: AddViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSpinnerAdapter()
+        initAddBtnClickListener()
+        initAddFoodStateObserver()
+    }
 
+    private fun initAddFoodStateObserver() {
+        viewModel.addFoodState.flowWithLifecycle(lifecycle).onEach {
+            when (it) {
+                is UiState.Success -> {
+                    finish()
+                }
+
+                else -> {}
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun initAddBtnClickListener() {
         binding.btnAdd.setOnClickListener {
             val food = Food(
                 id = null,
@@ -31,15 +47,6 @@ class AddActivity : BindingActivity<ActivityAddBinding>(R.layout.activity_add) {
             )
             viewModel.addFood(food)
         }
-
-        viewModel.addFoodState.flowWithLifecycle(lifecycle).onEach {
-            when(it){
-                is UiState.Success -> {
-                    finish()
-                }
-                else -> {}
-            }
-        }.launchIn(lifecycleScope)
     }
 
     private fun initSpinnerAdapter() {

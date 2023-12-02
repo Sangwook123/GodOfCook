@@ -12,6 +12,8 @@ interface FoodRepository {
 
     suspend fun getEqualSubCategory(inputSubCategory: String): Flow<List<Food>>
 
+    suspend fun getCombineList(name: String?, category: String?, subCategory: String?): Flow<List<Food>>
+
     suspend fun getFoodById(id: Int): Flow<Food?>
 
     suspend fun addFood(food: Food)

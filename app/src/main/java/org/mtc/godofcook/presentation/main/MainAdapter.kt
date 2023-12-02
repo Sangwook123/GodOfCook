@@ -11,7 +11,6 @@ import org.mtc.godofcook.util.view.ItemDiffCallback
 class MainAdapter(
     private val onLongClicked: (Food) -> Unit,
     private val onClicked: (Food) -> Unit,
-    private val context: Context
 ) : ListAdapter<Food, MainViewHolder>(DiffUtil) {
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         holder.onBind(getItem(position))
@@ -21,8 +20,7 @@ class MainAdapter(
         return MainViewHolder(
             ItemHomePostBinding.inflate(LayoutInflater.from(parent.context), parent, false),
             onLongClicked,
-            onClicked,
-            context
+            onClicked
         )
     }
 

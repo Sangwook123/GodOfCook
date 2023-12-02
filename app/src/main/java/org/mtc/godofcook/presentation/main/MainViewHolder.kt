@@ -9,7 +9,6 @@ class MainViewHolder(
     private val binding: ItemHomePostBinding,
     private val onLongClicked: (Food) -> Unit,
     private val onClicked: (Food) -> Unit,
-    private val context: Context
 ) : RecyclerView.ViewHolder(binding.root) {
     fun onBind(data: Food?) {
         binding.data = data
@@ -22,5 +21,7 @@ class MainViewHolder(
         binding.root.setOnClickListener {
             onClicked(data)
         }
+
+        binding.executePendingBindings()
     }
 }

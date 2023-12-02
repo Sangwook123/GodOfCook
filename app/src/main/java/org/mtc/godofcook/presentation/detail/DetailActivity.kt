@@ -19,16 +19,26 @@ class DetailActivity : BindingActivity<ActivityDetailBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getFood(id)
-        viewModel.getFood.flowWithLifecycle(lifecycle).onEach {
-            binding.data = it
-        }.launchIn(lifecycleScope)
+        initGetFoodObserver()
+        initDeleteBtnClickListener()
+        initDeleteResultObserver()
+    }
 
+    private fun initDeleteResultObserver() {
+        viewModel.deleteResult.flowWithLifecycle(lifecycle).onEach {
+            if (it) finish()
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun initDeleteBtnClickListener() {
         binding.tvDetailDelete.setOnClickListener {
             showFoodDeleteAlertDialogFragment(id)
         }
+    }
 
-        viewModel.deleteResult.flowWithLifecycle(lifecycle).onEach {
-            if(it) finish()
+    private fun initGetFoodObserver() {
+        viewModel.getFood.flowWithLifecycle(lifecycle).onEach {
+            binding.data = it
         }.launchIn(lifecycleScope)
     }
 

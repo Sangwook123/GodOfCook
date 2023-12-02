@@ -30,7 +30,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         mainAdapter = MainAdapter(
             { food -> showFoodDeleteAlertDialogFragment(food.id) },
             { food -> navigateToDetail(food.id) },
-            context = this
         )
         binding.rvMainPost.adapter = mainAdapter
 
@@ -41,6 +40,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         initCategorySpinnerSelectedListener()
         initSubCategorySpinnerSelectedListener()
         initCollectCommonFoodList()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getFoodList()
     }
 
     private fun initCollectCommonFoodList() {

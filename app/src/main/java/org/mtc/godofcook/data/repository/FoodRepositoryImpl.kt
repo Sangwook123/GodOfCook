@@ -1,6 +1,7 @@
 package org.mtc.godofcook.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -38,6 +39,59 @@ class FoodRepositoryImpl @Inject constructor(
         foodDataSource.getFoodById(id).map {
             it?.toFood()
         }
+
+    override suspend fun getCombineList(
+        name: String?,
+        category: String?,
+        subCategory: String?
+    ): Flow<List<Food>> = combine(
+        if(name.isNullOrBlank()){
+            foodDataSource.getAll().map {
+                toFoodList(it)
+            }
+        } else {
+            foodDataSource.getContainInput(name).map { data ->
+                toFoodList(data)
+            }
+        }
+        ,
+        if(category.isNullOrBlank()){
+            foodDataSource.getAll().map {
+                toFoodList(it)
+            }
+        } else {
+            foodDataSource.getEqualCategory(category).map { data ->
+                toFoodList(data)
+            }
+        }
+        ,
+        if(subCategory.isNullOrBlank()){
+            foodDataSource.getAll().map {
+                toFoodList(it)
+            }
+        } else {
+            foodDataSource.getEqualSubCategory(subCategory).map { data ->
+                toFoodList(data)
+            }
+        }
+    ){ nameList, categoryList, subCategoryList ->
+        findCommonElements(nameList,categoryList,subCategoryList)
+    }
+    private fun findCommonElements(
+        list1: List<Food>,
+        list2: List<Food>,
+        list3: List<Food>
+    ): List<Food> {
+        val commonElements = mutableListOf<Food>()
+
+        for (food1 in list1) {
+            if (food1 in list2 && food1 in list3) {
+                commonElements.add(food1)
+            }
+        }
+
+        return commonElements
+    }
     override suspend fun addFood(food: Food) = foodDataSource.addFood(toFoodInfoEntity(food))
 
     override suspend fun addFoods(foodList: List<Food>) = foodDataSource.addFoods(
